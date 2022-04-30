@@ -1,6 +1,6 @@
 require('dotenv').config({path: '../.env'});
 const { userService } = require('../services');
-const {Site, Shop, Warehouse} = require("../models")
+const { Sites, Shops, WareHouses} = require("../models")
 
 const getAll = async (req, res) => {
     try {
@@ -13,9 +13,8 @@ const getAll = async (req, res) => {
 
 const populate = async (req, res) => {
     try {
-        console.log("site warehouse")
 
-        const siteWarehouse = await Site.create({
+        const siteWarehouse = await Sites.create({
             coordinates: {
                 lat: 22,
                 lng: 33
@@ -29,7 +28,7 @@ const populate = async (req, res) => {
             objectType: "warehouse"
         })
         console.log("site warehouse")
-        const siteShop = await Site.create({
+        const siteShop = await Sites.create({
             coordinates: {
                 lat: 22,
                 lng: 33
@@ -42,12 +41,12 @@ const populate = async (req, res) => {
             Bikes: [],
             objectType: "shop"
         })
-        const shop = await Shop.create({
+        const shop = await Shops.create({
             warehouses: [],
-            montlyCost: 10000,
+            monthlyCost: 10000,
             siteId: siteShop._id
         })
-        const warehouse = await Warehouse.create({
+        const warehouse = await WareHouses.create({
             transports: [
                 {transportType: "truck",
                 quantity: 3},
