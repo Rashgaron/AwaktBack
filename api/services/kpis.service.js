@@ -13,7 +13,7 @@ const getPurchases = async (kpiType, filter, year) => {
 } 
 
 const getMostBoughtMotorbikes = async (filter, year) => {
-    const motos = await MotorBikes.find();
+    let motos = await MotorBikes.find();
     if(filter === "month")
         motos = motos.filter(x => x.buyDate.getFullYear() == year);
 
@@ -23,6 +23,7 @@ const getMostBoughtMotorbikes = async (filter, year) => {
         result[x.brandName].count += 1;
     })
 
+    return Object.entries(result).map(([key, value]) => ({brandName: key, count: value.count}));
 }
 
 const getByType = async (filter, year) => {
@@ -34,7 +35,7 @@ const getByType = async (filter, year) => {
         result[x.motorType] = (result[x.motorType] || {count: 0});
         result[x.motorType].count += 1;
     })
-    return result;
+    return Object.entries(result).map(([key, value]) => ({motorType: key, count: value.count}));
 }
 
 const getBuys = async (filter, year) => {
@@ -53,7 +54,7 @@ const getBuys = async (filter, year) => {
             result[`${x.buyDate.getFullYear()}`].count += 1;
         });
     }
-    return result; 
+    return Object.entries(result).map(([key, value]) => ({year: key, count: value.count}));
 }
 
 module.exports = {
