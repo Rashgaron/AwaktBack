@@ -5,3 +5,4 @@ module.exports.siteServices = require('./sites.service');
 module.exports.purchaseService = require('./purchase.service');
 module.exports.saleService = require('./sales.service');
 module.exports.profitService = require('./profit.service');
+module.exports.inventoryService = require('./inventory.service');
