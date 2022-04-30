@@ -5,6 +5,6 @@ module.exports = {
     Shops: require('./Shop'),
     MotorBikes: require('./MotorBike'),
     MonthlyReport: require('./MonthlyReport'),
-    Sale: require('./Sale'),
+    Sales: require('./Sale'),
     TransportRegister: require('./TransportRegister'),
 }

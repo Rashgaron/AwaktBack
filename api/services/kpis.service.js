@@ -1,4 +1,4 @@
-const { MotorBikes } = require('../models');
+const { MotorBikes, Sales } = require('../models');
 
 const getPurchases = async (kpiType, filter, year) => {
     switch (kpiType) {
@@ -41,12 +41,14 @@ const getMostBoughtMotorbikes = async (filter, year) => {
 }
 
 const getMostSoldMotorbikes = async (filter, year) => {
-    let motos = await MotorBikes.find();
+    let sales = await Sales.find();
     if(filter === "month")
-        motos = motos.filter(x => x.saleDate.getFullYear() == year);
-
+        sales = sales.filter(x => x.saleDate.getFullYear() == year);
     let result = {};
-    motos.map(x => {
+    
+    
+
+    sales.map(x => {
         result[x.brandName] = (result[x.brandName] || {count: 0}); 
         result[x.brandName].count += 1;
     })
@@ -67,11 +69,11 @@ const getByType = async (filter, year) => {
 }
 
 const getByTypeTime = async (filter, year) => {
-    let motos = await MotorBikes.find();
+    let sales = await Sales.find();
     if(filter === "month")
-        motos = motos.filter(x => x.saleDate.getFullYear() == year);
+        sales = sales.filter(x => x.saleDate.getFullYear() == year);
     let result = {};
-    motos.map(x => {
+    sales.map(x => {
         result[x.motorType] = (result[x.motorType] || {count: 0});
         result[x.motorType].count += 1;
     })
@@ -98,17 +100,17 @@ const getBuys = async (filter, year) => {
 }
 
 const getSalesTime = async (filter, year) => {
-    const motos = await MotorBikes.find();
+    const sales = await Sales.find();
     let result = {};
     if(filter === "month"){
-        motos.map(x => {
-            if(x.buyDate.getFullYear() == year){
+        sales.map(x => {
+            if(x.saleDate.getFullYear() == year){
                 result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] = (result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] || {count: 0});
                 result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`].count += 1;
             }
         });
     }else if(filter === "year"){
-        motos.map(x => {
+        sales.map(x => {
             result[`${x.saleDate.getFullYear()}`] = (result[`${x.saleDate.getFullYear()}`] || {count: 0});
             result[`${x.saleDate.getFullYear()}`].count += 1;
         });

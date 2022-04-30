@@ -1,6 +1,6 @@
 // getPurchases, sales, costs, profits, inventory, zones
 const { kpisServices } = require('../services');
-const { MotorBikes }= require('../models');
+const { MotorBikes, Sales }= require('../models');
 const getPurchases = async (req, res) => {
     try {
         const data = await kpisServices.getPurchases(req.query.kpiType, req.query.filter, req.query.year);    
@@ -47,6 +47,25 @@ const populate = async (req, res) => {
     return res.status(200).send(moto);
 }
 
+const populateSales = async (req, res) => {
+    Sales.create({
+        motorBikeId: "626cd76309a1b95e4985f0ff",
+        brandName: "tesla",
+        saleDate: new Date("2021-01-28"),
+        shopId: "626cbaf2e86a3c6f52cba40b",
+        salePrice: 5050,
+    });
+
+    const sale = await Sales.find();
+    let result = {};
+    sale.map(x => {
+        result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] ? 
+        result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] += 1: 
+        result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] = 1;
+    });
+    return res.status(200).send(sale);
+}
+
 const randomDate = (start, end) => {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
@@ -54,5 +73,6 @@ const randomDate = (start, end) => {
 module.exports = {
     getPurchases,
     getSales,
-    populate
+    populate,
+    populateSales
 }

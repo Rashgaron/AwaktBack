@@ -9,4 +9,6 @@ router.get('/sales', KpisController.getSales);
 
 router.get('/populate', KpisController.populate);
 
+router.get('/populateSales', KpisController.populateSales);
+
 module.exports = router;
