@@ -7,6 +7,9 @@ const Shop = new mongoose.Schema({
     monthlyCost: {
         type: Number,
     },
+    siteId: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
 });
 
 module.exports = mongoose.model('Shop', Shop);

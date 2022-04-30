@@ -7,6 +7,9 @@ const Warehouse = new mongoose.Schema({
             quantity: Number
         }],
     },
+    siteId: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
 });
 
 module.exports = mongoose.model('Warehouse', Warehouse);
