@@ -27,6 +27,16 @@ const populate = async (req, res) => {
         buyPrice: 100,
         refactorPrice: 50,
     });
+
+    for(let i = 0; i < 1000; i++){
+        MotorBikes.create({
+            name: "compra",
+            brandName: "tesla",
+            buyDate: randomDate(new Date("2019-01-01"), new Date()),
+            buyPrice: Math.random(),
+            refactorPrice: Math.random(),
+        });
+    }
     const moto = await MotorBikes.find();
     let result = {};
     moto.map(x => {
@@ -35,6 +45,10 @@ const populate = async (req, res) => {
         result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}`] = 1;
     });
     return res.status(200).send(moto);
+}
+
+const randomDate = (start, end) => {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
 module.exports = {
