@@ -1,19 +1,29 @@
 const { MotorBikes } = require('../models');
 const getPurchases = async (kpiType, filter) => {
     switch (kpiType) {
-        case 'most_buyed':
+        case 'most_bought':
             return getMostBuyedMotorbikes(filter);
         case 'type':
             return getByType(filter);
         case 'purchases':
             return await getBuys(filter);
-        return null;
+        default: 
+            return null;
     }
 } 
 
 const getMostBuyedMotorbikes = () => {}
 
-const getByType = () => {}
+const getByType = async () => {
+    const motos = await MotorBikes.find();
+    let result = {};
+    motos.map(x => {
+        result[x.motorType] ? 
+        result[x.motorType] +=1: 
+        result[x.motorType] = 1;
+    })
+    return Object.entries(result);
+}
 
 const getBuys = async (filter) => {
     const motos = await MotorBikes.find();

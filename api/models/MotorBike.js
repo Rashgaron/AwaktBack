@@ -17,6 +17,10 @@ const MotorBike = new mongoose.Schema({
     refactorPrice: {
         type: Number
     },
+    motorType: {
+        type: String,
+        enum: ['electric', 'gas'],
+    }
 })
 
 module.exports = mongoose.model('MotorBike', MotorBike);

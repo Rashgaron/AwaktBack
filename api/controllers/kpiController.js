@@ -10,7 +10,7 @@ const getPurchases = async (req, res) => {
     }
 }
 
-const populate = async (req,res) => {
+const populate = async (req, res) => {
     MotorBikes.create({
         name: "compra",
         brandName: "tesla",
@@ -21,7 +21,6 @@ const populate = async (req,res) => {
     const moto = await MotorBikes.find();
     let result = {};
     moto.map(x => {
-        console.log(`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}`)
         result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}`] ? 
         result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}`] += 1: 
         result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}`] = 1;
