@@ -27,7 +27,7 @@ const Site = new mongoose.Schema({
     zone: {
         type: String,
     },
-    Bikes: {
+    MotorBikes: {
         type:  [mongoose.Schema.Types.ObjectId],
     },
     objectType: {
