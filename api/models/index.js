@@ -4,7 +4,7 @@ module.exports = {
     WareHouses: require('./Warehouse'),
     Shops: require('./Shop'),
     MotorBikes: require('./MotorBike'),
-    Reports: require('./Report'),
+    MonthlyReport: require('./MonthlyReport'),
     Sale: require('./Sale'),
     TransportRegister: require('./TransportRegister'),
 }

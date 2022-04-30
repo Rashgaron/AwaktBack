@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Report = new mongoose.Schema({
+const MonthlyReport = new mongoose.Schema({
     month: {
         type: String,
         required: 'The month is required',
@@ -19,4 +19,4 @@ const Report = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('Report', Report);
+module.exports = mongoose.model('Report', MonthlyReport);

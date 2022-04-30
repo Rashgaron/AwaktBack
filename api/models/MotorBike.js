@@ -7,14 +7,11 @@ const MotorBike = new mongoose.Schema({
     brandName: {
         type: String 
     },
-    saleYear: {
-        type: Number,
-        required: 'The sale year is required',
+    buyDate: {
+        type: Date,
+        required: 'The buy date is required',
     },
     buyPrice: {
-        type: Number
-    },
-    salePrice: {
         type: Number
     },
     refactorPrice: {
