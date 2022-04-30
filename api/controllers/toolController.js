@@ -1,8 +1,24 @@
-const { MotorBikes, Sites, Shops, WareHouses, Sales }= require('../models');
+const { MotorBikes, Sites, Shops, WareHouses, Sales, MonthlyReport }= require('../models');
 
 const populate = async (req, res) => {
-    populateSales();
-    return res.status(200);
+    try {
+        await populateMonthlyReport();
+        return res.status(200);       
+    } catch (error) {
+        return res.status(500).send(error.toString());
+    }
+
+}
+
+const populateMonthlyReport = async () => {
+    for(let i = 0; i < 9; i++){
+        const data = await MonthlyReport.create({
+            siteId: "626d6667f45da7a5b44f7a60",
+            date: new Date(`2021-0${i+1}-28`),
+            monthIncome: Math.random() * 100,
+            monthExpense: Math.random() * 100,
+        })
+    }
 }
 
 const populateMotorBikes = async (req, res) => {
