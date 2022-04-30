@@ -3,4 +3,5 @@ module.exports = {
     User: require('./user'),
     Sites: require('./sites'),
     Kpis: require('./kpis'),
+    Tools: require('./tools')
 }
