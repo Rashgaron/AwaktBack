@@ -1,12 +1,11 @@
 const { MotorBikes, Sales } = require('../models');
 
 const getSales = async (kpiType, filter, year) => {
-    let data = await Sales.find();
     switch (kpiType) {
         case 'most_sold':
-            return getMostSoldMotorbikes(filter, year, data);
+            return getMostSoldMotorbikes(filter, year);
         case 'type':
-            return getByTypeTime(filter, year, data);
+            return getByTypeTime(filter, year);
         case 'sales':
             return await getSalesTime(filter, year);
         default: 
@@ -14,46 +13,31 @@ const getSales = async (kpiType, filter, year) => {
     }
 } 
 
-const getMostSoldMotorbikes = async (filter, year, data) => {
-    let result = [];
+const getMostSoldMotorbikes = async (filter, year) => {
+    let sales = await Sales.find();
     if(filter === "month")
-        await Promise.all(data.map(async (x) => {
-            if(x.saleDate.getFullYear() == year){
-                const motorBike = await MotorBikes.findOne({_id: x.motorBikeId});
-                result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}-${motorBike.brandName}`] = (result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}-${motorBike.brandName}`] || {count: 0, brandName: motorBike.brandName});
-                result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}-${motorBike.brandName}`].count += 1;
-            }
-        }))
-    else{
-        await Promise.all(data.map(async (x) => {
-            const motorBike = await MotorBikes.findOne({_id: x.motorBikeId});
-            result[`${x.saleDate.getFullYear()}-${motorBike.brandName}`] = (result[`${x.saleDate.getFullYear()}-${motorBike.brandName}`] || {count: 0, brandName: motorBike.brandName});
-            result[`${x.saleDate.getFullYear()}-${motorBike.brandName}`].count += 1;
-        })) 
-    }
+        sales = sales.filter(x => x.saleDate.getFullYear() == year);
+    let result = {};
+    
+    
 
+    sales.map(x => {
+        result[x.brandName] = (result[x.brandName] || {count: 0}); 
+        result[x.brandName].count += 1;
+    })
 
     return Object.entries(result).map(([key, value]) => ({brandName: key, count: value.count}));
 }
 
-const getByTypeTime = async (filter, year, data) => {
-    let result = [];
+const getByTypeTime = async (filter, year) => {
+    let sales = await Sales.find();
     if(filter === "month")
-        await Promise.all(data.map(async (x) => {
-            if(x.saleDate.getFullYear() == year){
-                const motorBike = await MotorBikes.findOne({_id: x.motorBikeId});
-                result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}-${motorBike.motorType}`] = (result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}-${motorBike.motorType}`] || {count: 0, motorType: motorBike.motorType});
-                result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}-${motorBike.motorType}`].count += 1;
-            }
-        }))
-    else{
-        await Promise.all(data.map(async (x) => {
-            const motorBike = await MotorBikes.findOne({_id: x.motorBikeId});
-            result[`${x.saleDate.getFullYear()}-${motorBike.motorType}`] = (result[`${x.saleDate.getFullYear()}-${motorBike.motorType}`] || {count: 0, motorType: motorBike.motorType});
-            result[`${x.saleDate.getFullYear()}-${motorBike.motorType}`].count += 1;
-        })) 
-    }
-
+        sales = sales.filter(x => x.saleDate.getFullYear() == year);
+    let result = {};
+    sales.map(x => {
+        result[x.motorType] = (result[x.motorType] || {count: 0});
+        result[x.motorType].count += 1;
+    })
     return Object.entries(result).map(([key, value]) => ({motorType: key, count: value.count}));
 }
 
