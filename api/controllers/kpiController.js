@@ -1,6 +1,6 @@
 // getPurchases, sales, costs, profits, inventory, zones
 const { kpisServices } = require('../services');
-const { MotorBikes, Sales }= require('../models');
+const { MotorBikes, Sites, Shops, WareHouses }= require('../models');
 const getPurchases = async (req, res) => {
     try {
         const data = await kpisServices.getPurchases(req.query.kpiType, req.query.filter, req.query.year);    
@@ -10,6 +10,10 @@ const getPurchases = async (req, res) => {
     }
 }
 
+const getCosts = async (req, res) => {
+    try {
+       const data = await kpisServices.getCosts(req.query.kpiType, req.query.filter, req.query.year); 
+       return res.status(200).send(data);
 const getSales = async (req, res) => {
     try {
         const data = await kpisServices.getSales(req.query.kpiType, req.query.filter, req.query.year);    
@@ -20,31 +24,57 @@ const getSales = async (req, res) => {
 }
 
 const populate = async (req, res) => {
-    MotorBikes.create({
-        name: "compra",
-        brandName: "tesla",
-        buyDate: new Date("2021-01-28"),
-        buyPrice: 100,
-        refactorPrice: 50,
-    });
+    await populateMotorBikes();
+    return res.status(200).send(moto);
+}
 
-    for(let i = 0; i < 1000; i++){
+const populateMotorBikes = async (req, res) => {
+    for(let i = 0; i < 10000; i++){
         MotorBikes.create({
-            name: "compra",
-            brandName: "tesla",
-            buyDate: randomDate(new Date("2019-01-01"), new Date()),
+            name: "hola",
+            brandName: `tesla${10%i}`,
+            buyDate: randomDate(new Date(2019, 0, 1), new Date()),
             buyPrice: Math.random(),
             refactorPrice: Math.random(),
-        });
+            motorType: Math.round(Math.random()) ? "electric" : "gas",
+        })
     }
-    const moto = await MotorBikes.find();
-    let result = {};
-    moto.map(x => {
-        result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}`] ? 
-        result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}`] += 1: 
-        result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}`] = 1;
-    });
-    return res.status(200).send(moto);
+}
+
+let max = 41.438824137155535;
+let min = 41.44760026283956;
+let maxLat =2.272574;
+let minLat = 2.113856;
+
+const populateBikes = async (req, res) => {
+    for(let i = 0; i < 1000; i++){
+        let random = Math.random();
+        const site = await Sites.create({
+            coordinates:{
+                lat: random * (max - min) + min,
+                lng: random * (maxLat - minLat) + minLat
+            },
+            direction: "hola",
+            capacity: Math.random(),
+            current: Math.random(),
+            numEmployees: Math.random(),
+            MotorBikes: [],
+            objectType: Math.round(Math.random()) ? "warehouse" : "shop",
+        })
+        if(site.objectType === "warehouse"){
+            const warehouse = await WareHouses.create({
+                siteId: site._id,
+                transports: [],
+            })
+        }else {
+            const shop = await Shops.create({
+                siteId: site._id,
+                warehouses: [],
+                monthlyCost: Math.random()
+            })
+        }
+    }
+
 }
 
 const populateSales = async (req, res) => {
@@ -74,5 +104,6 @@ module.exports = {
     getPurchases,
     getSales,
     populate,
-    populateSales
+    populateSales,
+    getCosts
 }

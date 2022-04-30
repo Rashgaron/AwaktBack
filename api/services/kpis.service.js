@@ -13,6 +13,9 @@ const getPurchases = async (kpiType, filter, year) => {
     }
 } 
 
+const getCosts = async (kpiType, filter, year) => {
+
+}
 const getSales = async (kpiType, filter, year) => {
     switch (kpiType) {
         case 'most_sold':
@@ -28,16 +31,23 @@ const getSales = async (kpiType, filter, year) => {
 
 const getMostBoughtMotorbikes = async (filter, year) => {
     let motos = await MotorBikes.find();
-    if(filter === "month")
+    let result = [];
+    if(filter === "month"){
         motos = motos.filter(x => x.buyDate.getFullYear() == year);
+            motos.map(x => {
+                if(x.buyDate.getFullYear() == year){
+                    result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}-${x.brandName}`] = (result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}-${x.brandName}`] || {count: 0, brandName: x.brandName});
+                    result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}-${x.brandName}`].count += 1;
+                }
+            });
+    }else {
+        motos.map(x=>{
+            result[`${x.buyDate.getFullYear()}-${x.brandName}`] = (result[`${x.buyDate.getFullYear()}-${x.brandName}`] || {count: 0, brandName: x.brandName});
+            result[`${x.buyDate.getFullYear()}-${x.brandName}`].count += 1;
+        })
+    }
 
-    let result = {};
-    motos.map(x => {
-        result[x.brandName] = (result[x.brandName] || {count: 0}); 
-        result[x.brandName].count += 1;
-    })
-
-    return Object.entries(result).map(([key, value]) => ({brandName: key, count: value.count}));
+    return Object.entries(result).map(([key, value]) => ({date: key, brandName: value.brandName, count: value.count}));
 }
 
 const getMostSoldMotorbikes = async (filter, year) => {
@@ -58,14 +68,23 @@ const getMostSoldMotorbikes = async (filter, year) => {
 
 const getByType = async (filter, year) => {
     let motos = await MotorBikes.find();
-    if(filter === "month")
+    let result = [];
+    if(filter === "month"){
         motos = motos.filter(x => x.buyDate.getFullYear() == year);
-    let result = {};
-    motos.map(x => {
-        result[x.motorType] = (result[x.motorType] || {count: 0});
-        result[x.motorType].count += 1;
-    })
-    return Object.entries(result).map(([key, value]) => ({motorType: key, count: value.count}));
+        motos.map(x => {
+            if(x.buyDate.getFullYear() == year){
+                result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}-${x.motorType}`] = (result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}-${x.motorType}`] || {count: 0, motorType: x.motorType});
+                result[`${x.buyDate.getFullYear()}-${x.buyDate.getMonth()}-${x.motorType}`].count += 1;
+            }
+        });
+    }else {
+        motos.map(x=>{
+            result[`${x.buyDate.getFullYear()}-${x.motorType}`] = (result[`${x.buyDate.getFullYear()}-${x.motorType}`] || {count: 0, motorType: x.motorType});
+            result[`${x.buyDate.getFullYear()}-${x.motorType}`].count += 1;
+        })
+    }
+
+    return Object.entries(result).map(([key, value]) => ({date: key, motorType: value.motorType, count: value.count}));
 }
 
 const getByTypeTime = async (filter, year) => {

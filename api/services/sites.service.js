@@ -2,9 +2,10 @@ const { Sites, WareHouses, Shops } = require('../models');
 
 const getAll = async () => {
     const sites = await Sites.find();
-    const result = Promise.all(
+    let result = [];
+    result = await Promise.all(
         sites.map( async (site) => {
-            return feedSite(site);
+            return await feedSite(site);
         }))
     return result;
 }
@@ -22,7 +23,7 @@ const feedSite = async (site) => {
             zone: site.zone,
             bikes: site.Bikes,
             objectType: site.objectType,
-            transports: warehouse.transports
+            transports: warehouse?.transports
         }
 
     }else{
@@ -37,8 +38,8 @@ const feedSite = async (site) => {
             zone: site.zone,
             bikes: site.Bikes,
             objectType: site.objectType,
-            warehouses: shop.warehouses, 
-            monthlyCost: shop.montlyCost
+            warehouses: shop?.warehouses, 
+            monthlyCost: shop?.montlyCost
         };
     }
 }
