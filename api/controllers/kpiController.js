@@ -1,9 +1,10 @@
 // getPurchases, sales, costs, profits, inventory, zones
-const { kpisServices } = require('../services');
+const { purchaseService } = require('../services');
 const { MotorBikes, Sites, Shops, WareHouses }= require('../models');
+
 const getPurchases = async (req, res) => {
     try {
-        const data = await kpisServices.getPurchases(req.query.kpiType, req.query.filter, req.query.year);    
+        const data = await purchaseService.getPurchases(req.query.kpiType, req.query.filter, req.query.year);    
         return res.status(200).send(data);
     } catch (error) {
         return res.status(500).send({msg: error.toString()});
@@ -14,6 +15,11 @@ const getCosts = async (req, res) => {
     try {
        const data = await kpisServices.getCosts(req.query.kpiType, req.query.filter, req.query.year); 
        return res.status(200).send(data);
+    }catch(error){
+        return res.status(500).send({msg: error.toString()});
+    }
+}
+
 const getSales = async (req, res) => {
     try {
         const data = await kpisServices.getSales(req.query.kpiType, req.query.filter, req.query.year);    
@@ -22,6 +28,7 @@ const getSales = async (req, res) => {
         return res.status(500).send({msg: error.toString()});
     }
 }
+
 
 const populate = async (req, res) => {
     await populateMotorBikes();
