@@ -20,7 +20,10 @@ const getCosts = async (req, res) => {
 }
 
 const populate = async (req, res) => {
-    await populateMotorBikes();
+    let data = await Sites.findOne();
+    data.motorBikes = ["626d198ad9adb714aee7da8b"];
+    await Sites.updateOne({_id: data._id}, data);
+
     return res.status(200).send(moto);
 }
 
