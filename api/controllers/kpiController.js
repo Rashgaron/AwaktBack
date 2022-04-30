@@ -1,5 +1,5 @@
 // getPurchases, sales, costs, profits, inventory, zones
-const { purchaseService } = require('../services');
+const { purchaseService, saleService } = require('../services');
 
 const getPurchases = async (req, res) => {
     try {

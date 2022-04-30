@@ -1,8 +1,8 @@
-const { MotorBikes, Sites, Shops, WareHouses }= require('../models');
+const { MotorBikes, Sites, Shops, WareHouses, Sales }= require('../models');
 
 const populate = async (req, res) => {
-    await populateMotorBikes();
-    return res.status(200).send(moto);
+    populateSales();
+    return res.status(200);
 }
 
 const populateMotorBikes = async (req, res) => {
@@ -18,23 +18,29 @@ const populateMotorBikes = async (req, res) => {
     }
 }
 
-let max = 41.438824137155535;
-let min = 41.44760026283956;
-let maxLat =2.272574;
-let minLat = 2.113856;
+let maxLng = 2.033515;
+let minLng =  2.27394;
+let maxLat = 41.34101057533281;
+let minLat = 41.469659 ;
 
-const populateBikes = async (req, res) => {
-    for(let i = 0; i < 1000; i++){
-        let random = Math.random();
+const populateSites = async (req, res) => {
+    await Sites.collection.drop();
+    await WareHouses.collection.drop();
+    await Shops.collection.drop();
+
+    for(let i = 0; i < 60; i++){
+        let randomLat = Math.random();
+        let randomLng = Math.random();
+        let capacity = Math.floor(Math.random() * 100) + 1;
         const site = await Sites.create({
             coordinates:{
-                lat: random * (max - min) + min,
-                lng: random * (maxLat - minLat) + minLat
+                lat: randomLat * (maxLat - minLat) + minLat,
+                lng: randomLng * (maxLng - minLng) + minLng
             },
-            direction: "hola",
-            capacity: Math.random(),
-            current: Math.random(),
-            numEmployees: Math.random(),
+            direction: `C/ Valencia ${i}`,
+            capacity: capacity, 
+            current: capacity - Math.floor(Math.random() * capacity),
+            numEmployees: capacity,
             MotorBikes: [],
             objectType: Math.round(Math.random()) ? "warehouse" : "shop",
         })
@@ -54,23 +60,18 @@ const populateBikes = async (req, res) => {
 
 }
 
-const populateSales = async (req, res) => {
-    Sales.create({
-        motorBikeId: "626cd76309a1b95e4985f0ff",
+const populateSales = async () => {
+    const sale = await Sales.create({
+        motorBikeId: "626d198ad9adb714aee7da85",
         brandName: "tesla",
-        saleDate: new Date("2021-01-28"),
-        shopId: "626cbaf2e86a3c6f52cba40b",
+        saleDate: new Date("2020-01-28"),
+        shopId: "626d198ad9adb714aee7da85",
         salePrice: 5050,
     });
 
-    const sale = await Sales.find();
-    let result = {};
-    sale.map(x => {
-        result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] ? 
-        result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] += 1: 
-        result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] = 1;
-    });
-    return res.status(200).send(sale);
+    console.log(sale);
+
+    return sale;
 }
 
 const randomDate = (start, end) => {
