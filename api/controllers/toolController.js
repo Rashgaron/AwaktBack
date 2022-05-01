@@ -1,14 +1,14 @@
-const { MotorBikes, Sites, Shops, WareHouses, MonthlyReport }= require('../models');
+const { MotorBikes, Sites, Shops, WareHouses, MonthlyReport, Sales }= require('../models');
 
 const populate = async (req, res) => {
-    await populateMonthlyReport();
+    await populateSales();
     return res.status(200).send(moto);
 }
 
 const populateMonthlyReport = () => {
     for(let i = 0; i < 100; i++){
         MonthlyReport.create({
-            date: new Date(`201${i%9}`, i%12, 1),
+            date: new Date(`2019`, i%12, 1),
             monthIncome: Math.random() * 1000,
             monthExpense: Math.random() * 1000,
             siteId: "626dd32f45b9d006d79ebba6"
@@ -65,23 +65,15 @@ const populateBikes = async (req, res) => {
 
 }
 
-const populateSales = async (req, res) => {
-    Sales.create({
-        motorBikeId: "626cd76309a1b95e4985f0ff",
-        brandName: "tesla",
-        saleDate: new Date("2021-01-28"),
-        shopId: "626cbaf2e86a3c6f52cba40b",
-        salePrice: 5050,
-    });
-
-    const sale = await Sales.find();
-    let result = {};
-    sale.map(x => {
-        result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] ? 
-        result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] += 1: 
-        result[`${x.saleDate.getFullYear()}-${x.saleDate.getMonth()}`] = 1;
-    });
-    return res.status(200).send(sale);
+const populateSales = () => {
+    for(let i = 0; i < 100; i++){
+        Sales.create({
+            motorBikeId: "626cd76309a1b95e4985f0ff",
+            saleDate: new Date(`201${i%10}`, i%12, 1),
+            shopId: "626dd32f45b9d006d79ebba6",
+            salePrice: Math.floor(Math.random()*500),
+        });
+    }
 }
 
 const randomDate = (start, end) => {
