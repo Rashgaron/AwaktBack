@@ -65,12 +65,13 @@ const populateBikes = async (req, res) => {
 
 }
 
-const populateSales = () => {
+const populateSales = async () => {
+    await Sales.collection.drop();
     for(let i = 0; i < 100; i++){
         Sales.create({
-            motorBikeId: "626cd76309a1b95e4985f0ff",
+            motorBikeId: "626dcfff6b3f01b9689f1933",
             saleDate: new Date(`201${i%10}`, i%12, 1),
-            shopId: "626dd32f45b9d006d79ebba6",
+            shopId: "626dd32f45b9d006d79ebba8",
             salePrice: Math.floor(Math.random()*500),
         });
     }
