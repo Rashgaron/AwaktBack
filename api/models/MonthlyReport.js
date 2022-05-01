@@ -1,13 +1,9 @@
 const mongoose = require('mongoose');
 
 const MonthlyReport = new mongoose.Schema({
-    month: {
-        type: String,
-        required: 'The month is required',
-    },
-    year: {
-        type: Number,
-        required: 'The year is required',
+  date: {
+        type: Date,
+        required: 'The date is required',
     },
     monthIncome: {
         type: Number,
@@ -17,6 +13,10 @@ const MonthlyReport = new mongoose.Schema({
         type: Number,
         required: 'The month expense is required',
     },
+    siteId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
 })
 
-module.exports = mongoose.model('Report', MonthlyReport);
+module.exports = mongoose.model('MonthlyReport', MonthlyReport);
