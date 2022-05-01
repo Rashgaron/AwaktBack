@@ -4,8 +4,6 @@ const { authValidation } = require('../validations');
 const validate = require('../middlewares/validate');
 const { AuthController } = require('../controllers');
 
-console.log(AuthController);
-
 // api/auth/register
 router.post('/register', validate(authValidation.register), AuthController.register);
 
